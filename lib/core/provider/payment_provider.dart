@@ -44,8 +44,19 @@ class PaymentProvider extends ChangeNotifier {
                 interestRate) /
             100;
     num total = amount + totalLoan;
-    var total2 = (total/loanDuration)/12;
-    installmentAmount = total2.toString();
+    num monthlyTotal = (total/loanDuration);
+    num yearlyTotal = (total/loanDuration)/12;
+    installmentAmount =
+        isMonth
+    ? monthlyTotal.toString()
+    : yearlyTotal.toString();
+
+    print(isMonth);
+    print(totalLoan);
+    print(loanDuration);
+    print(interestRate);
+    print(amount);
+    print(installmentAmount);
 
    // calculateTotalAmount(installmentAmount: total2, loanDuration: loanDuration);
 
@@ -69,12 +80,11 @@ class PaymentProvider extends ChangeNotifier {
         interestRate) /
         100;
     totalAmount = (totalLoan + amount).toString();
-
-    print(totalLoan);
-    print(loanDuration);
-    print(interestRate);
-    print(amount);
-    print(totalAmount);
+    // print(totalLoan);
+    // print(loanDuration);
+    // print(interestRate);
+    // print(amount);
+    // print(totalAmount);
     notifyListeners();
     return totalAmount;
   }
