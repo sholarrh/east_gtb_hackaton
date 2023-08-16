@@ -24,7 +24,6 @@ class InterestRateCalculator extends StatefulWidget {
 }
 
 class _InterestRateCalculatorState extends State<InterestRateCalculator> {
-
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _amountToRepayController =
       TextEditingController();
@@ -138,64 +137,92 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                         BuildButton(
                           onPressed: () {
 
+                            if (_key.currentState?.validate() ?? false) {
+                              _onCalculate();
+                            } else {
+                              // failureTopSnackBar(
+                              //   context: context,
+                              //   message: 'Please input the correct details',
+                              // );
+                            }
+                            num totalLoan = num.parse(_amountController.text);
+                            num loanDuration = num.parse(_durationController.text);
+                            num interestRate = num.parse(_rateController.text);
+                            bool isMonth =  Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
+                                ? true
+                                : false;
+
+                            // Do not know why they are here atm
+                            data.calculatedInstallmentAmount = data.installmentAmount;
+                            cupertinoData.installmentPackage = 'Monthly Installment Amount';
+
+
                             if (cupertinoData.showGTPackages == false) {
+
                               // Calculates the Simple interest of the loan type
-                              String amount = data.calculateInstallmentAmountInMonth(
-                                totalLoan: num.parse(_amountController.text),
-                                loanDuration:  num.parse(_durationController.text),
-                                interestRate: num.parse(_rateController.text),
-                                isMonth:
-                                Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
-                                    ? true
-                                    : false,
+                              num amount = data.calculateInstallmentAmountInMonth(
+                                totalLoan: totalLoan,
+                                loanDuration:  loanDuration,
+                                interestRate: interestRate,
+                                isMonth: isMonth,
                               );
-
                               // updates the amount
-                              Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(num.parse(amount));
+                              Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(amount);
 
+                              // Do not know why they are here atm
                               data.calculatedInstallmentAmount = data.installmentAmount;
-                              cupertinoData.installmentPackage = 'Monthly Installment Amount';
+                             // cupertinoData.installmentPackage = 'Monthly Installment Amount';
 
-                              String totalAmount = data.calculateTotalAmount(
-                                totalLoan: num.parse(_amountController.text),
-                                loanDuration:  num.parse(_durationController.text),
-                                interestRate: num.parse(_rateController.text),
-                                isMonth:
-                                Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
-                                    ? true
-                                    : false,
+                              // Calculates the total amount to be repaid
+                              num totalAmount = data.calculateTotalAmount(
+                                totalLoan: totalLoan,
+                                loanDuration:  loanDuration,
+                                interestRate: interestRate,
+                                isMonth: isMonth,
                               );
-                              Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(num.parse(totalAmount));
-
+                              // updates the Total amount  to be repaid and rate
+                              Provider.of<InterestRateProvider>(context,
+                                  listen: false)
+                                  .updatingRate(interestRate);
+                              Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
                             }else if (cupertinoData.showGTPackages) {
+
                               // Calculates the Simple interest of the loan type
-                              String amount = data.calculateInstallmentAmountInMonth(
-                                totalLoan: num.parse(_amountController.text),
-                                loanDuration:  num.parse(_durationController.text),
+                              num amount = data.calculateInstallmentAmountInMonth(
+                                totalLoan: totalLoan,
+                                loanDuration:  loanDuration,
                                 interestRate: rateData.rate,
-                                isMonth:
-                                Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
-                                    ? true
-                                    : false,
+                                isMonth: isMonth,
                               );
 
                               // updates the amount
-                              Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(num.parse(amount));
+                              Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(amount);
 
-                              data.calculatedInstallmentAmount = data.installmentAmount;
-                              cupertinoData.installmentPackage = 'Monthly Installment Amount';
-
-                              String totalAmount = data.calculateTotalAmount(
-                                totalLoan: num.parse(_amountController.text),
-                                loanDuration:  num.parse(_durationController.text),
+                              num totalAmount = data.calculateTotalAmount(
+                                totalLoan: totalLoan,
+                                loanDuration:  loanDuration,
                                 interestRate: rateData.rate,
-                                isMonth:
-                                Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
-                                    ? true
-                                    : false,
+                                isMonth: isMonth,
                               );
+                              Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
+                            }
 
-                              Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(num.parse(totalAmount));
+                            if (rateData.showInterestRate) {
+                               num totalAmount = num.parse(_amountToRepayController.text);
+
+                              // Calculates the rate of the loan collected
+                              num rate = rateData.calculateInterestRate(
+                                totalAmount: totalAmount,
+                                totalLoan: totalLoan,
+                                loanDuration:  loanDuration,
+                                isMonth: isMonth,
+                              );
+                              data.installmentAmount = totalAmount/12;
+                               data.calculatedInstallmentAmount = data.installmentAmount;
+                              Provider.of<InterestRateProvider>(context,
+                                  listen: false)
+                                  .updatingRate(rate);
+                               Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
                             }
                             setState(() {});
                           },
@@ -229,5 +256,11 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
         ),
       ),
     );
+  }
+  void _onCalculate () {
+    _key.currentState?.save();
+
+
+
   }
 }

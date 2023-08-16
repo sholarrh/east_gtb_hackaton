@@ -48,7 +48,7 @@ class InterestRateRow extends StatelessWidget {
             Container(
               height: getProportionateScreenHeight(60),
               width: getProportionateScreenWidth(80),
-              color: Colors.grey,
+              color: Palette.greyColor,
               alignment: Alignment.center,
               child: createGeneralText(
                 inputText: '%',

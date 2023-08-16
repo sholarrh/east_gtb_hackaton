@@ -34,7 +34,7 @@ class _ResultContainerState extends State<ResultContainer> {
   @override
   Widget build(BuildContext context) {
     var data = Provider.of<PaymentProvider>(context);
-    var cupertinoData = Provider.of<CupertinoSwitchProvider>(context);
+    //var cupertinoData = Provider.of<CupertinoSwitchProvider>(context);
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(
@@ -92,14 +92,12 @@ class _ResultContainerState extends State<ResultContainer> {
 
                  package = value;
 
-                String amount = data.changeInstallmentAmount(
-                    oldAmount: num.parse(data.installmentAmount),
+                num amount = data.changeInstallmentAmount(
+                    oldAmount: data.installmentAmount,
                     installmentPlan: package,
                 );
                 //setState(() {});
-
                 // data.calculatedInstallmentAmount = amount;
-
               },
               buttonStyleData: ButtonStyleData(
                 height: getProportionateScreenHeight(60),
@@ -154,7 +152,7 @@ class _ResultContainerState extends State<ResultContainer> {
               Consumer<PaymentProvider>(builder: (context, payment, child) {
                 //print(payment.calculatedInstallmentAmount);
                 return createGeneralText(
-                  inputText: payment.calculatedInstallmentAmount,
+                  inputText: payment.calculatedInstallmentAmount.toString(),
                   fontSize: 20,
                   fontFamily: FontFamily.urbanistRegular,
                   weight: FontWeight.w600,
@@ -193,7 +191,7 @@ class _ResultContainerState extends State<ResultContainer> {
               ),
               Consumer<PaymentProvider>(builder: (context, payment, child) {
                 return createGeneralText(
-                  inputText: payment.totalAmount,
+                  inputText: payment.totalAmount.toString(),
                   fontSize: 20,
                   fontFamily: FontFamily.urbanistRegular,
                   weight: FontWeight.w600,
@@ -211,7 +209,7 @@ class _ResultContainerState extends State<ResultContainer> {
             height: getProportionateScreenHeight(20),
           ),
           createGeneralText(
-            inputText: 'Effective Interest Rate',
+            inputText: 'Interest Rate',
             fontSize: 20,
             fontFamily: FontFamily.urbanistRegular,
             weight: FontWeight.w600,
@@ -220,12 +218,17 @@ class _ResultContainerState extends State<ResultContainer> {
           SizedBox(
             height: getProportionateScreenHeight(20),
           ),
-          createGeneralText(
-            inputText: '10%',
-            fontSize: 20,
-            fontFamily: FontFamily.urbanistRegular,
-            weight: FontWeight.w600,
-            colorName: Palette.textColor2,
+
+          Consumer<InterestRateProvider>(builder: (context, payment, child) {
+            //print(payment.calculatedInstallmentAmount);
+            return createGeneralText(
+              inputText: '${payment.rate.toString()} %',
+              fontSize: 20,
+              fontFamily: FontFamily.urbanistRegular,
+              weight: FontWeight.w600,
+              colorName: Palette.primaryColor,
+            );
+          }
           ),
           SizedBox(
             height: getProportionateScreenHeight(20),

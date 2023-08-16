@@ -17,4 +17,25 @@ class InterestRateProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  num calculateInterestRate({
+    required num loanDuration,
+    required num totalLoan,
+    required num totalAmount,
+    required bool isMonth,
+  }) {
+    num amount = isMonth
+        ? totalAmount / (totalLoan *
+        (loanDuration / 12) )
+        : totalAmount / (totalLoan *
+        loanDuration ) ;
+    rate = amount;
+    // print(totalLoan);
+    // print(loanDuration);
+    // print(interestRate);
+    // print(amount);
+    // print(totalAmount);
+    notifyListeners();
+    return rate;
+  }
+
 }

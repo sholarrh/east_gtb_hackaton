@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 
 class PaymentProvider extends ChangeNotifier {
 
-  String installmentAmount = '';
-  String calculatedInstallmentAmount = '';
-  String totalAmount = '';
+  num installmentAmount = 0;
+  num calculatedInstallmentAmount = 0;
+  num totalAmount = 0;
 
-  String changeInstallmentAmount(
+  num changeInstallmentAmount(
       {required num oldAmount, required String installmentPlan}) {
    num amount = 0;
 
@@ -23,12 +23,12 @@ class PaymentProvider extends ChangeNotifier {
       amount = oldAmount * 12;
       //notifyListeners();
     }
-    calculatedInstallmentAmount = amount.toString();
+    calculatedInstallmentAmount = amount;
    notifyListeners();
     return calculatedInstallmentAmount;
   }
 
-  String calculateInstallmentAmountInMonth({
+  num calculateInstallmentAmountInMonth({
     required num totalLoan,
     required num loanDuration,
     required num interestRate,
@@ -48,23 +48,14 @@ class PaymentProvider extends ChangeNotifier {
     num yearlyTotal = (total/loanDuration)/12;
     installmentAmount =
         isMonth
-    ? monthlyTotal.toString()
-    : yearlyTotal.toString();
-
-    print(isMonth);
-    print(totalLoan);
-    print(loanDuration);
-    print(interestRate);
-    print(amount);
-    print(installmentAmount);
-
-   // calculateTotalAmount(installmentAmount: total2, loanDuration: loanDuration);
+    ? monthlyTotal
+    : yearlyTotal;
 
     notifyListeners();
     return installmentAmount;
   }
 
-  String calculateTotalAmount({
+  num calculateTotalAmount({
     required num loanDuration,
     required num totalLoan,
     required num interestRate,
@@ -79,7 +70,7 @@ class PaymentProvider extends ChangeNotifier {
         loanDuration *
         interestRate) /
         100;
-    totalAmount = (totalLoan + amount).toString();
+    totalAmount = (totalLoan + amount);
     // print(totalLoan);
     // print(loanDuration);
     // print(interestRate);
@@ -90,12 +81,12 @@ class PaymentProvider extends ChangeNotifier {
   }
 
   void updateInstallmentAmount(num amount) {
-    installmentAmount = amount.toString();
+    installmentAmount = amount;
     notifyListeners();
   }
 
   void updateTotalAmount(num amount) {
-    totalAmount = amount.toString();
+    totalAmount = amount;
     notifyListeners();
   }
 }
