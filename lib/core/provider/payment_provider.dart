@@ -1,33 +1,91 @@
 import 'package:flutter/foundation.dart';
 
 class PaymentProvider extends ChangeNotifier {
-  String installmentAmount = '200000';
+
+  String installmentAmount = '';
   String calculatedInstallmentAmount = '';
   String totalAmount = '';
 
   String changeInstallmentAmount(
-      {required String oldAmount, required String installmentPlan}) {
-
-    int amount = int.parse(oldAmount);
+      {required num oldAmount, required String installmentPlan}) {
+   num amount = 0;
 
     if (installmentPlan == 'Monthly Installment Amount') {
-      amount = amount;
+      amount = oldAmount;
       //notifyListeners();
-    }
-    if (installmentPlan == 'Quarterly Installment Amount') {
-      amount = amount * 3;
+    }else if (installmentPlan == 'Quarterly Installment Amount') {
+      amount = oldAmount * 3;
       //notifyListeners();
-    }
-    if (installmentPlan == 'Bi-Annually Installment Amount') {
-      amount = amount * 6;
+    }else if (installmentPlan == 'Bi-Annually Installment Amount') {
+      amount = oldAmount * 6;
       //notifyListeners();
-    }
-    if (installmentPlan == 'Annually Installment Amount') {
-      amount = amount * 12;
+    }else if (installmentPlan == 'Annually Installment Amount') {
+      amount = oldAmount * 12;
       //notifyListeners();
     }
     calculatedInstallmentAmount = amount.toString();
-   return calculatedInstallmentAmount;
+   notifyListeners();
+    return calculatedInstallmentAmount;
   }
 
+  String calculateInstallmentAmountInMonth({
+    required num totalLoan,
+    required num loanDuration,
+    required num interestRate,
+    required bool isMonth,
+  }) {
+    num amount = isMonth
+        ? (totalLoan *
+                (loanDuration / 12) *
+                interestRate) /
+            100
+        : (totalLoan *
+                loanDuration *
+                interestRate) /
+            100;
+    num total = amount + totalLoan;
+    var total2 = (total/loanDuration)/12;
+    installmentAmount = total2.toString();
+
+   // calculateTotalAmount(installmentAmount: total2, loanDuration: loanDuration);
+
+    notifyListeners();
+    return installmentAmount;
+  }
+
+  String calculateTotalAmount({
+    required num loanDuration,
+    required num totalLoan,
+    required num interestRate,
+    required bool isMonth,
+  }) {
+    num amount = isMonth
+        ? (totalLoan *
+        (loanDuration / 12) *
+        interestRate) /
+        100
+        : (totalLoan *
+        loanDuration *
+        interestRate) /
+        100;
+    totalAmount = (totalLoan + amount).toString();
+
+    print(totalLoan);
+    print(loanDuration);
+    print(interestRate);
+    print(amount);
+    print(totalAmount);
+    notifyListeners();
+    return totalAmount;
+  }
+
+  void updateInstallmentAmount(num amount) {
+    installmentAmount = amount.toString();
+    notifyListeners();
+  }
+
+  void updateTotalAmount(num amount) {
+    totalAmount = amount.toString();
+    notifyListeners();
+  }
 }

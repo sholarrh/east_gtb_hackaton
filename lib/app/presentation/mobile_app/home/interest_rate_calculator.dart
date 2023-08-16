@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/provider/cupertino_switch_provider.dart';
 import '../../../../core/provider/interest_rate_provider.dart';
+import '../../../../core/provider/payment_provider.dart';
 import '../../../../core/widgets/amount_to_repay_row.dart';
 import '../../../../core/widgets/button.dart';
 import '../../../../core/widgets/header.dart';
@@ -23,6 +24,7 @@ class InterestRateCalculator extends StatefulWidget {
 }
 
 class _InterestRateCalculatorState extends State<InterestRateCalculator> {
+
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _amountToRepayController =
       TextEditingController();
@@ -33,6 +35,9 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
 
   @override
   Widget build(BuildContext context) {
+    var data = Provider.of<PaymentProvider>(context);
+    var cupertinoData = Provider.of<CupertinoSwitchProvider>(context);
+    var rateData = Provider.of<InterestRateProvider>(context);
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: SafeArea(
@@ -91,7 +96,7 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                                       return switchValue.showGTPackages
                                           ? const LoanTypeRow()
                                           : InterestRateRow(
-                                          rateController: _rateController);
+                                              rateController: _rateController);
                                     }),
                                   ],
                                 );
@@ -104,7 +109,7 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                             Provider.of<InterestRateProvider>(context,
                                     listen: false)
                                 .toggleInterestRate();
-                             setState(() {});
+                            setState(() {});
                           },
                           buttonText: 'VIEW INTEREST RATE',
                           containerHeight: 60,
@@ -132,13 +137,67 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                         ),
                         BuildButton(
                           onPressed: () {
-                            // Navigator.pop(context);
-                            // Navigator.pop(context);
-                            //
-                            // Navigator.pushReplacement(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => LoginScreen()),
-                            // );
+
+                            if (cupertinoData.showGTPackages == false) {
+                              // Calculates the Simple interest of the loan type
+                              String amount = data.calculateInstallmentAmountInMonth(
+                                totalLoan: num.parse(_amountController.text),
+                                loanDuration:  num.parse(_durationController.text),
+                                interestRate: num.parse(_rateController.text),
+                                isMonth:
+                                Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
+                                    ? true
+                                    : false,
+                              );
+
+                              // updates the amount
+                              Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(num.parse(amount));
+
+                              data.calculatedInstallmentAmount = data.installmentAmount;
+                              cupertinoData.installmentPackage = 'Monthly Installment Amount';
+
+                              String totalAmount = data.calculateTotalAmount(
+                                totalLoan: num.parse(_amountController.text),
+                                loanDuration:  num.parse(_durationController.text),
+                                interestRate: num.parse(_rateController.text),
+                                isMonth:
+                                Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
+                                    ? true
+                                    : false,
+                              );
+                              Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(num.parse(totalAmount));
+
+                            }else if (cupertinoData.showGTPackages) {
+                              // Calculates the Simple interest of the loan type
+                              String amount = data.calculateInstallmentAmountInMonth(
+                                totalLoan: num.parse(_amountController.text),
+                                loanDuration:  num.parse(_durationController.text),
+                                interestRate: rateData.rate,
+                                isMonth:
+                                Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
+                                    ? true
+                                    : false,
+                              );
+
+                              // updates the amount
+                              Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(num.parse(amount));
+
+                              data.calculatedInstallmentAmount = data.installmentAmount;
+                              cupertinoData.installmentPackage = 'Monthly Installment Amount';
+
+                              String totalAmount = data.calculateTotalAmount(
+                                totalLoan: num.parse(_amountController.text),
+                                loanDuration:  num.parse(_durationController.text),
+                                interestRate: rateData.rate,
+                                isMonth:
+                                Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
+                                    ? true
+                                    : false,
+                              );
+
+                              Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(num.parse(totalAmount));
+                            }
+                            setState(() {});
                           },
                           buttonText: 'CALCULATE',
                           containerHeight: 60,

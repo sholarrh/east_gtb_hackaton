@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../constant.dart';
 import '../provider/cupertino_switch_provider.dart';
+import '../provider/interest_rate_provider.dart';
 import '../size_config.dart';
 import 'build_text.dart';
 
@@ -15,18 +16,34 @@ class LoanTypeRow extends StatefulWidget {
 }
 
 class _LoanTypeRowState extends State<LoanTypeRow> {
-  final List<String> items = <String>[
-    'GT Salary Advance',
-     'GTBank School Fees Advance',
-    'QuickCredit',
-    'Max Advance',
-    'Max Plans',
-    'Compact Advance',
-    'GT Mortgage',
-    'Premium Advance',
-    'Travel Advance',
-    'Vehicle Insurance Premium Financing',
+  //
+  // final List<String> items = <String>[
+  //   'GT Salary Advance',
+  //    'GTBank School Fees Advance',
+  //   'QuickCredit',
+  //   'Max Advance',
+  //   'Max Plans',
+  //   'Compact Advance',
+  //   'GT Mortgage',
+  //   'Premium Advance',
+  //   'Travel Advance',
+  //   'Vehicle Insurance Premium Financing',
+  // ];
+
+  List<Map<String, dynamic>> loanOptions = [
+    {'name': 'GT Salary Advance', 'rate': 0.21},
+    {'name': 'GTBank School Fees Advance', 'rate': 0.21},
+    {'name': 'QuickCredit', 'rate': 0.216},
+    {'name': 'Max Advance', 'rate': 0.19},
+    {'name': 'Max Plans', 'rate': 0.16},
+    {'name': 'Compact Advance', 'rate': 0.15},
+    {'name': 'GT Mortgage', 'rate': 0.23},
+    {'name': 'Premium Advance', 'rate': 0.20},
+    {'name': 'Travel Advance', 'rate': 0.20},
+    {'name': 'Vehicle Insurance Premium Financing', 'rate': 0.2004},
   ];
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +87,11 @@ class _LoanTypeRowState extends State<LoanTypeRow> {
                 ),
               ],
             ),
-            items: items
+            items: loanOptions
                 .map((item) => DropdownMenuItem<String>(
-                      value: item,
+                      value: item['name'],
                       child: Text(
-                        item,
+                        item['name'],
                         style: const TextStyle(
                             fontFamily: FontFamily.outfitRegular,
                             fontSize: 16,
@@ -88,6 +105,14 @@ class _LoanTypeRowState extends State<LoanTypeRow> {
             value: Provider.of<CupertinoSwitchProvider>(context, listen: false).loanPackage,
             onChanged: (value) {
               Provider.of<CupertinoSwitchProvider>(context, listen: false).toggleLoanPackage(value!);
+
+              for (var loan in loanOptions) {
+                if (loan['name'] == value) {
+                  num rate = loan['rate'];
+                  Provider.of<InterestRateProvider>(context, listen: false).updatingRate(rate);
+                  break;
+                }
+              }
               setState(() {});
             },
             buttonStyleData: ButtonStyleData(

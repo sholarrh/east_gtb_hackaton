@@ -21,6 +21,7 @@ class ResultContainer extends StatefulWidget {
 }
 
 class _ResultContainerState extends State<ResultContainer> {
+
   final List<String> items = const <String>[
     'Monthly Installment Amount',
     'Quarterly Installment Amount',
@@ -32,6 +33,8 @@ class _ResultContainerState extends State<ResultContainer> {
 
   @override
   Widget build(BuildContext context) {
+    var data = Provider.of<PaymentProvider>(context);
+    var cupertinoData = Provider.of<CupertinoSwitchProvider>(context);
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(
@@ -86,8 +89,17 @@ class _ResultContainerState extends State<ResultContainer> {
               onChanged: (value) {
                 Provider.of<CupertinoSwitchProvider>(context, listen: false)
                     .toggleInstallmentPackage(value!);
-                setState(() {});
-                package = value;
+
+                 package = value;
+
+                String amount = data.changeInstallmentAmount(
+                    oldAmount: num.parse(data.installmentAmount),
+                    installmentPlan: package,
+                );
+                //setState(() {});
+
+                // data.calculatedInstallmentAmount = amount;
+
               },
               buttonStyleData: ButtonStyleData(
                 height: getProportionateScreenHeight(60),
@@ -140,15 +152,9 @@ class _ResultContainerState extends State<ResultContainer> {
                 width: getProportionateScreenWidth(5),
               ),
               Consumer<PaymentProvider>(builder: (context, payment, child) {
-
-              String amount = payment.changeInstallmentAmount(
-                  oldAmount: payment.installmentAmount,
-                  installmentPlan: package,
-              );
-             // String amount = payment.installmentAmount;
-
+                //print(payment.calculatedInstallmentAmount);
                 return createGeneralText(
-                  inputText: amount,
+                  inputText: payment.calculatedInstallmentAmount,
                   fontSize: 20,
                   fontFamily: FontFamily.urbanistRegular,
                   weight: FontWeight.w600,
@@ -186,9 +192,8 @@ class _ResultContainerState extends State<ResultContainer> {
                 width: getProportionateScreenWidth(5),
               ),
               Consumer<PaymentProvider>(builder: (context, payment, child) {
-                String amount = payment.totalAmount;
                 return createGeneralText(
-                  inputText: amount,
+                  inputText: payment.totalAmount,
                   fontSize: 20,
                   fontFamily: FontFamily.urbanistRegular,
                   weight: FontWeight.w600,
