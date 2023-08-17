@@ -43,8 +43,8 @@ class PaymentProvider extends ChangeNotifier {
   }) {
     num amount = isMonth
         ? (totalLoan *
-                (loanDuration / 12) *
-                interestRate) /
+                (loanDuration ) *
+                interestRate/12) /
             100
         : (totalLoan *
                 loanDuration *
@@ -76,8 +76,8 @@ class PaymentProvider extends ChangeNotifier {
   }) {
     num amount = isMonth
         ? (totalLoan *
-        (loanDuration / 12) *
-        interestRate) /
+        (loanDuration ) *
+        interestRate/12) /
         100
         : (totalLoan *
         loanDuration *

@@ -23,7 +23,7 @@ class InterestRateRow extends StatelessWidget {
         Row(
           children: [
             createGeneralText(
-              inputText: 'Interest Rate',
+              inputText: 'Interest Rate (p.a)',
               fontSize: 20,
               fontFamily: FontFamily.urbanistRegular,
               weight: FontWeight.w800,

@@ -44,8 +44,8 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-              left: getProportionateScreenWidth(16),
-              right: getProportionateScreenWidth(16),
+              left: getProportionateScreenWidth(8),
+              right: getProportionateScreenWidth(8),
               top: getProportionateScreenHeight(1),
               bottom: getProportionateScreenHeight(40),
             ),
@@ -114,18 +114,19 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                                 Provider.of<InterestRateProvider>(context,
                                         listen: false)
                                     .toggleInterestRate();
+
                                 setState(() {});
                               },
                               buttonText: Provider.of<InterestRateProvider>(
                                   context,
                                   listen: false)
                                   .showInterestRate
-                              ? 'VIEW INTEREST RATE'
-                              : 'VIEW TOTAL PAYMENT',
+                              ? 'VIEW TOTAL PAYMENT'
+                              : 'VIEW INTEREST RATE',
                               containerHeight: 60,
                               containerWidth: 185,
                               borderRadiusSize: 10,
-                              buttonTextSize: 14,
+                              buttonTextSize: 13,
                               buttonTextColor: Provider.of<InterestRateProvider>(
                                           context,
                                           listen: false)
@@ -147,6 +148,9 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                             // ),
                             BuildButton(
                               onPressed: () {
+                                if(rateData.showInterestRate){
+                                  _rateController.text = '0';
+                                }
                                 if (_key.currentState?.validate() ?? false) {
                                   _key.currentState?.save();
                                   num totalLoan = num.parse(_amountController.text);
@@ -190,6 +194,10 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                                         .updatingRate(interestRate);
                                     Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
 
+                                    _amountController.clear();
+                                    _rateController.clear();
+                                    _durationController.clear();
+
                                   }else if (cupertinoData.showGTPackages) {
 
                                     // Calculates the Simple interest of the loan type
@@ -213,6 +221,10 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                                     data.calculatedInstallmentAmount = data.installmentAmount;
                                     cupertinoData.installmentPackage = 'Monthly Installment Amount';
                                     Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
+
+                                    _amountController.clear();
+                                    _rateController.clear();
+                                    _durationController.clear();
                                   }
 
                                   if (rateData.showInterestRate) {
@@ -231,11 +243,17 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                                         listen: false)
                                         .updatingRate(rate);
                                     Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
+
+                                    _amountController.clear();
+                                    _amountToRepayController.clear();
+                                    _durationController.clear();
                                   }
-                                  // showDialog(
-                                  //     context: context,
-                                  //     builder: (context )
-                                  // );
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context ) {
+                                        return const ResultContainer();
+                                      }
+                                  );
                                 } else {
                                   failureTopSnackBar(
                                     context: context,
@@ -280,7 +298,7 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                     ),
                   ),
                 ),
-                const ResultContainer(),
+
               ],
             ),
           ),
