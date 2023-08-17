@@ -6,6 +6,13 @@ class PaymentProvider extends ChangeNotifier {
   num calculatedInstallmentAmount = 0;
   num totalAmount = 0;
 
+  void reset() {
+     installmentAmount = 0;
+     calculatedInstallmentAmount = 0;
+     totalAmount = 0;
+     notifyListeners();
+  }
+
   num changeInstallmentAmount(
       {required num oldAmount, required String installmentPlan}) {
    num amount = 0;
@@ -51,6 +58,12 @@ class PaymentProvider extends ChangeNotifier {
     ? monthlyTotal
     : yearlyTotal;
 
+    // print(totalLoan);
+    // print(loanDuration);
+    // print(interestRate);
+    // print(amount);
+    // print(totalAmount);
+
     notifyListeners();
     return installmentAmount;
   }
@@ -71,11 +84,12 @@ class PaymentProvider extends ChangeNotifier {
         interestRate) /
         100;
     totalAmount = (totalLoan + amount);
-    // print(totalLoan);
-    // print(loanDuration);
-    // print(interestRate);
-    // print(amount);
-    // print(totalAmount);
+    print('Total Loan: $totalLoan');
+    print('Loan Duration: $loanDuration');
+    print('Interest Rate: $interestRate');
+    print('Amount: $amount');
+    print('Calculated Installmental Amount: $calculatedInstallmentAmount');
+    print('Total Amount: $totalAmount');
     notifyListeners();
     return totalAmount;
   }

@@ -31,5 +31,14 @@ class CupertinoSwitchProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  //Provider.of<CreateUserDetails>(context, listen: false).resetUserDetails();
+  void reset() {
+     showGTPackages = false;
+     selectedOption = 'Year(s)';
+     loanPackage = 'GT Salary Advance';
+     installmentPackage = 'Monthly Installment Amount';
+    notifyListeners();
+  }
+
+
+//Provider.of<CreateUserDetails>(context, listen: false).resetUserDetails();
 }

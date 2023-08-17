@@ -31,16 +31,16 @@ class _LoanTypeRowState extends State<LoanTypeRow> {
   // ];
 
   List<Map<String, dynamic>> loanOptions = [
-    {'name': 'GT Salary Advance', 'rate': 0.21},
-    {'name': 'GTBank School Fees Advance', 'rate': 0.21},
-    {'name': 'QuickCredit', 'rate': 0.216},
-    {'name': 'Max Advance', 'rate': 0.19},
-    {'name': 'Max Plans', 'rate': 0.16},
-    {'name': 'Compact Advance', 'rate': 0.15},
-    {'name': 'GT Mortgage', 'rate': 0.23},
-    {'name': 'Premium Advance', 'rate': 0.20},
-    {'name': 'Travel Advance', 'rate': 0.20},
-    {'name': 'Vehicle Insurance Premium Financing', 'rate': 0.2004},
+    {'name': 'GT Salary Advance', 'rate': 21},
+    {'name': 'GTBank School Fees Advance', 'rate': 21},
+    {'name': 'QuickCredit', 'rate': 21.6},
+    {'name': 'Max Advance', 'rate': 19},
+    {'name': 'Max Plans', 'rate': 16},
+    {'name': 'Compact Advance', 'rate': 15},
+    {'name': 'GT Mortgage', 'rate': 23},
+    {'name': 'Premium Advance', 'rate': 20},
+    {'name': 'Travel Advance', 'rate': 20},
+    {'name': 'Vehicle Insurance Premium Financing', 'rate': 20.04},
   ];
 
 

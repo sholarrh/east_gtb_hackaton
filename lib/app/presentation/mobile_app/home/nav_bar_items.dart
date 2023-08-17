@@ -2,8 +2,12 @@
 
 import 'package:east_gtb_hackaton/core/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constant.dart';
+import '../../../../core/provider/cupertino_switch_provider.dart';
+import '../../../../core/provider/interest_rate_provider.dart';
+import '../../../../core/provider/payment_provider.dart';
 import '../../../../core/widgets/build_text.dart';
 import 'interest_rate_calculator.dart';
 
@@ -44,6 +48,11 @@ class Products extends StatelessWidget {
                 SizedBox(height: getProportionateScreenHeight(12),),
                 GestureDetector(
                   onTap: () {
+
+                    Provider.of<CupertinoSwitchProvider>(context, listen: false).reset();
+                    Provider.of<PaymentProvider>(context, listen: false).reset();
+                    Provider.of<InterestRateProvider>(context, listen: false).reset();
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(

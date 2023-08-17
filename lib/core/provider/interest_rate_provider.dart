@@ -7,6 +7,12 @@ class InterestRateProvider extends ChangeNotifier{
   bool showInterestRate = false;
   num rate = 0;
 
+  void reset() {
+     showInterestRate = false;
+     rate = 0;
+    notifyListeners();
+  }
+
   void toggleInterestRate() {
     showInterestRate = !showInterestRate;
     notifyListeners();

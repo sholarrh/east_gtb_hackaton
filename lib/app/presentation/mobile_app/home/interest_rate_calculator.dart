@@ -13,6 +13,7 @@ import '../../../../core/widgets/header.dart';
 import '../../../../core/widgets/interest_rate_row.dart';
 import '../../../../core/widgets/loan_duration_row.dart';
 import '../../../../core/widgets/loan_type_row.dart';
+import '../../../../core/widgets/snackbar.dart';
 import '../../../../core/widgets/switch.dart';
 import '../../../../core/widgets/total_loan_row.dart';
 
@@ -42,16 +43,18 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: getProportionateScreenWidth(16),
-              vertical: getProportionateScreenHeight(44),
+            padding: EdgeInsets.only(
+              left: getProportionateScreenWidth(16),
+              right: getProportionateScreenWidth(16),
+              top: getProportionateScreenHeight(1),
+              bottom: getProportionateScreenHeight(40),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const BackButton(),
                 SizedBox(
-                  height: getProportionateScreenHeight(20),
+                  height: getProportionateScreenHeight(5),
                 ),
                 const Header(),
                 Container(
@@ -103,140 +106,168 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                         SizedBox(
                           height: getProportionateScreenHeight(20),
                         ),
-                        BuildButton(
-                          onPressed: () {
-                            Provider.of<InterestRateProvider>(context,
-                                    listen: false)
-                                .toggleInterestRate();
-                            setState(() {});
-                          },
-                          buttonText: 'VIEW INTEREST RATE',
-                          containerHeight: 60,
-                          containerWidth: double.infinity,
-                          borderRadiusSize: 100,
-                          buttonTextSize: 16,
-                          buttonTextColor: Provider.of<InterestRateProvider>(
-                                      context,
-                                      listen: false)
-                                  .showInterestRate
-                              ? Palette.whiteColor
-                              : Palette.primaryColor,
-                          buttonColor: Provider.of<InterestRateProvider>(
-                                      context,
-                                      listen: false)
-                                  .showInterestRate
-                              ? Palette.primaryColor
-                              : Palette.whiteColor,
-                          borderColor: Palette.primaryColor.withOpacity(0.75),
-                          buttonTextWeight: FontWeight.w700,
-                          buttonTextFamily: FontFamily.urbanistRegular,
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(20),
-                        ),
-                        BuildButton(
-                          onPressed: () {
-
-                            if (_key.currentState?.validate() ?? false) {
-                              _onCalculate();
-                            } else {
-                              // failureTopSnackBar(
-                              //   context: context,
-                              //   message: 'Please input the correct details',
-                              // );
-                            }
-                            num totalLoan = num.parse(_amountController.text);
-                            num loanDuration = num.parse(_durationController.text);
-                            num interestRate = num.parse(_rateController.text);
-                            bool isMonth =  Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
-                                ? true
-                                : false;
-
-                            // Do not know why they are here atm
-                            data.calculatedInstallmentAmount = data.installmentAmount;
-                            cupertinoData.installmentPackage = 'Monthly Installment Amount';
-
-
-                            if (cupertinoData.showGTPackages == false) {
-
-                              // Calculates the Simple interest of the loan type
-                              num amount = data.calculateInstallmentAmountInMonth(
-                                totalLoan: totalLoan,
-                                loanDuration:  loanDuration,
-                                interestRate: interestRate,
-                                isMonth: isMonth,
-                              );
-                              // updates the amount
-                              Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(amount);
-
-                              // Do not know why they are here atm
-                              data.calculatedInstallmentAmount = data.installmentAmount;
-                             // cupertinoData.installmentPackage = 'Monthly Installment Amount';
-
-                              // Calculates the total amount to be repaid
-                              num totalAmount = data.calculateTotalAmount(
-                                totalLoan: totalLoan,
-                                loanDuration:  loanDuration,
-                                interestRate: interestRate,
-                                isMonth: isMonth,
-                              );
-                              // updates the Total amount  to be repaid and rate
-                              Provider.of<InterestRateProvider>(context,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            BuildButton(
+                              onPressed: () {
+                                Provider.of<InterestRateProvider>(context,
+                                        listen: false)
+                                    .toggleInterestRate();
+                                setState(() {});
+                              },
+                              buttonText: Provider.of<InterestRateProvider>(
+                                  context,
                                   listen: false)
-                                  .updatingRate(interestRate);
-                              Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
-                            }else if (cupertinoData.showGTPackages) {
+                                  .showInterestRate
+                              ? 'VIEW INTEREST RATE'
+                              : 'VIEW TOTAL PAYMENT',
+                              containerHeight: 60,
+                              containerWidth: 185,
+                              borderRadiusSize: 10,
+                              buttonTextSize: 14,
+                              buttonTextColor: Provider.of<InterestRateProvider>(
+                                          context,
+                                          listen: false)
+                                      .showInterestRate
+                                  ? Palette.whiteColor
+                                  : Palette.primaryColor,
+                              buttonColor: Provider.of<InterestRateProvider>(
+                                          context,
+                                          listen: false)
+                                      .showInterestRate
+                                  ? Palette.primaryColor
+                                  : Palette.whiteColor,
+                              borderColor: Palette.primaryColor.withOpacity(0.75),
+                              buttonTextWeight: FontWeight.w700,
+                              buttonTextFamily: FontFamily.urbanistRegular,
+                            ),
+                            // SizedBox(
+                            //   width: getProportionateScreenHeight(10),
+                            // ),
+                            BuildButton(
+                              onPressed: () {
+                                if (_key.currentState?.validate() ?? false) {
+                                  _key.currentState?.save();
+                                  num totalLoan = num.parse(_amountController.text);
+                                  num loanDuration = num.parse(_durationController.text);
 
-                              // Calculates the Simple interest of the loan type
-                              num amount = data.calculateInstallmentAmountInMonth(
-                                totalLoan: totalLoan,
-                                loanDuration:  loanDuration,
-                                interestRate: rateData.rate,
-                                isMonth: isMonth,
-                              );
+                                  bool isMonth =  Provider.of<CupertinoSwitchProvider>(context, listen: false).selectedOption == 'Month(s)'
+                                      ? true
+                                      : false;
 
-                              // updates the amount
-                              Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(amount);
+                                  // Do not know why they are here atm
+                                  data.calculatedInstallmentAmount = data.installmentAmount;
+                                  cupertinoData.installmentPackage = 'Monthly Installment Amount';
 
-                              num totalAmount = data.calculateTotalAmount(
-                                totalLoan: totalLoan,
-                                loanDuration:  loanDuration,
-                                interestRate: rateData.rate,
-                                isMonth: isMonth,
-                              );
-                              Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
-                            }
+                                  if (cupertinoData.showGTPackages == false) {
 
-                            if (rateData.showInterestRate) {
-                               num totalAmount = num.parse(_amountToRepayController.text);
+                                    // Calculates the Simple interest of the loan type
+                                    num interestRate = num.parse(_rateController.text);
+                                    num amount = data.calculateInstallmentAmountInMonth(
+                                      totalLoan: totalLoan,
+                                      loanDuration:  loanDuration,
+                                      interestRate: interestRate,
+                                      isMonth: isMonth,
+                                    );
+                                    // updates the amount
+                                    Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(amount);
 
-                              // Calculates the rate of the loan collected
-                              num rate = rateData.calculateInterestRate(
-                                totalAmount: totalAmount,
-                                totalLoan: totalLoan,
-                                loanDuration:  loanDuration,
-                                isMonth: isMonth,
-                              );
-                              data.installmentAmount = totalAmount/12;
-                               data.calculatedInstallmentAmount = data.installmentAmount;
-                              Provider.of<InterestRateProvider>(context,
+                                    // Do not know why they are here atm
+                                    data.calculatedInstallmentAmount = data.installmentAmount;
+                                    cupertinoData.installmentPackage = 'Monthly Installment Amount';
+
+                                    // Calculates the total amount to be repaid
+                                    num totalAmount = data.calculateTotalAmount(
+                                      totalLoan: totalLoan,
+                                      loanDuration:  loanDuration,
+                                      interestRate: interestRate,
+                                      isMonth: isMonth,
+                                    );
+                                    // updates the Total amount  to be repaid and rate
+                                    Provider.of<InterestRateProvider>(context,
+                                        listen: false)
+                                        .updatingRate(interestRate);
+                                    Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
+
+                                  }else if (cupertinoData.showGTPackages) {
+
+                                    // Calculates the Simple interest of the loan type
+                                    num amount = data.calculateInstallmentAmountInMonth(
+                                      totalLoan: totalLoan,
+                                      loanDuration:  loanDuration,
+                                      interestRate: rateData.rate,
+                                      isMonth: isMonth,
+                                    );
+
+                                    // updates the amount
+                                    Provider.of<PaymentProvider>(context, listen: false).updateInstallmentAmount(amount);
+
+                                    num totalAmount = data.calculateTotalAmount(
+                                      totalLoan: totalLoan,
+                                      loanDuration:  loanDuration,
+                                      interestRate: rateData.rate,
+                                      isMonth: isMonth,
+                                    );
+
+                                    data.calculatedInstallmentAmount = data.installmentAmount;
+                                    cupertinoData.installmentPackage = 'Monthly Installment Amount';
+                                    Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
+                                  }
+
+                                  if (rateData.showInterestRate) {
+                                    num totalAmount = num.parse(_amountToRepayController.text);
+
+                                    // Calculates the rate of the loan collected
+                                    num rate = rateData.calculateInterestRate(
+                                      totalAmount: totalAmount,
+                                      totalLoan: totalLoan,
+                                      loanDuration:  loanDuration,
+                                      isMonth: isMonth,
+                                    );
+                                    data.installmentAmount = totalAmount/12;
+                                    data.calculatedInstallmentAmount = data.installmentAmount;
+                                    Provider.of<InterestRateProvider>(context,
+                                        listen: false)
+                                        .updatingRate(rate);
+                                    Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
+                                  }
+                                  // showDialog(
+                                  //     context: context,
+                                  //     builder: (context )
+                                  // );
+                                } else {
+                                  failureTopSnackBar(
+                                    context: context,
+                                    message: 'Please input the correct details',
+                                  );
+                                }
+                                setState(() {});
+                              },
+                              buttonText: 'CALCULATE',
+                              containerHeight: 60,
+                              containerWidth: 185,
+                              borderRadiusSize: 10,
+                              buttonTextSize: 14,
+                              buttonTextColor: Provider.of<InterestRateProvider>(
+                                  context,
                                   listen: false)
-                                  .updatingRate(rate);
-                               Provider.of<PaymentProvider>(context, listen: false).updateTotalAmount(totalAmount);
-                            }
-                            setState(() {});
-                          },
-                          buttonText: 'CALCULATE',
-                          containerHeight: 60,
-                          containerWidth: double.infinity,
-                          borderRadiusSize: 100,
-                          buttonTextSize: 20,
-                          buttonTextColor: Palette.whiteColor,
-                          buttonColor: Palette.primaryColor,
-                          borderColor: Colors.transparent,
-                          buttonTextWeight: FontWeight.w700,
-                          buttonTextFamily: FontFamily.urbanistRegular,
+                                  .showInterestRate
+                                  ? Palette.primaryColor
+                                  : Palette.whiteColor,
+                              buttonColor: Provider.of<InterestRateProvider>(
+                                  context,
+                                  listen: false)
+                                  .showInterestRate
+                                  ? Palette.whiteColor
+                                  : Palette.primaryColor,
+                              borderColor: Palette.primaryColor.withOpacity(0.75),
+                              buttonTextWeight: FontWeight.w700,
+                              buttonTextFamily: FontFamily.urbanistRegular,
+                            ),
+                          ],
                         ),
+
                         SizedBox(
                           height: getProportionateScreenHeight(20),
                         ),
@@ -257,10 +288,9 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
       ),
     );
   }
-  void _onCalculate () {
-    _key.currentState?.save();
-
-
-
-  }
+  // void _onCalculate () {
+  //
+  //
+  //
+  // }
 }

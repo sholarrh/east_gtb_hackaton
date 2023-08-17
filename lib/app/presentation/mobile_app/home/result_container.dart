@@ -152,7 +152,7 @@ class _ResultContainerState extends State<ResultContainer> {
               Consumer<PaymentProvider>(builder: (context, payment, child) {
                 //print(payment.calculatedInstallmentAmount);
                 return createGeneralText(
-                  inputText: payment.calculatedInstallmentAmount.toString(),
+                  inputText: formatNumberToTwoDecimalPlaces(payment.calculatedInstallmentAmount).toString(),
                   fontSize: 20,
                   fontFamily: FontFamily.urbanistRegular,
                   weight: FontWeight.w600,
@@ -191,7 +191,7 @@ class _ResultContainerState extends State<ResultContainer> {
               ),
               Consumer<PaymentProvider>(builder: (context, payment, child) {
                 return createGeneralText(
-                  inputText: payment.totalAmount.toString(),
+                  inputText: formatNumberToTwoDecimalPlaces(payment.totalAmount).toString(),
                   fontSize: 20,
                   fontFamily: FontFamily.urbanistRegular,
                   weight: FontWeight.w600,
@@ -222,7 +222,7 @@ class _ResultContainerState extends State<ResultContainer> {
           Consumer<InterestRateProvider>(builder: (context, payment, child) {
             //print(payment.calculatedInstallmentAmount);
             return createGeneralText(
-              inputText: '${payment.rate.toString()} %',
+              inputText: '${formatNumberToTwoDecimalPlaces(payment.rate).toString()} %',
               fontSize: 20,
               fontFamily: FontFamily.urbanistRegular,
               weight: FontWeight.w600,
@@ -239,4 +239,8 @@ class _ResultContainerState extends State<ResultContainer> {
       ),
     );
   }
+  String formatNumberToTwoDecimalPlaces(num number) {
+    return number.toStringAsFixed(2);
+  }
+
 }
