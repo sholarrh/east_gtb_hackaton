@@ -15,11 +15,12 @@ class MySwitch extends StatelessWidget {
     return Row(
       children: [
         createGeneralText(
-          inputText: 'Calculate GtBank Loan Package',
+          inputText: 'Calculate GTCO Loan Package',
           fontSize: 16,
           fontFamily: FontFamily.urbanistRegular,
-          weight: FontWeight.w600,
+          weight: FontWeight.w800,
           colorName: Palette.textColor2,
+          fontStyle: FontStyle.italic,
         ),
         SizedBox(
           width: getProportionateScreenWidth(10),

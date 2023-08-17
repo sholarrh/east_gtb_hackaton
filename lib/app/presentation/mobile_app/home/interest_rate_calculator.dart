@@ -62,7 +62,7 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(
                     horizontal: getProportionateScreenWidth(10),
-                    vertical: getProportionateScreenHeight(24),
+                    vertical: getProportionateScreenHeight(40),
                   ),
                   decoration: const BoxDecoration(
                     color: Palette.whiteColor,
@@ -73,13 +73,13 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                       children: [
                         TotalLoanRow(controller: _amountController),
                         SizedBox(
-                          height: getProportionateScreenHeight(20),
+                          height: getProportionateScreenHeight(40),
                         ),
                         LoanDurationRow(
                           controller: _durationController,
                         ),
                         SizedBox(
-                          height: getProportionateScreenHeight(20),
+                          height: getProportionateScreenHeight(40),
                         ),
                         Consumer<InterestRateProvider>(
                             builder: (context, showRate, child) {
@@ -103,6 +103,15 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                                   ],
                                 );
                         }),
+                        SizedBox(
+                          height: getProportionateScreenHeight(40),
+                        ),
+
+                        const Divider(
+                          color: Palette.primaryColor,
+                          height: 2,
+                          thickness: 2,
+                        ),
                         SizedBox(
                           height: getProportionateScreenHeight(20),
                         ),
@@ -293,7 +302,7 @@ class _InterestRateCalculatorState extends State<InterestRateCalculator> {
                           color: Palette.primaryColor,
                           height: 2,
                           thickness: 2,
-                        )
+                        ),
                       ],
                     ),
                   ),

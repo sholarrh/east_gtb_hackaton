@@ -9,6 +9,7 @@ Text createGeneralText({
   required FontWeight weight,
   required Color colorName,
   required String fontFamily,
+  FontStyle? fontStyle,
   bool? softWrap,
   double letterSpacing = 0.0,
   TextAlign? textAlign,
@@ -22,6 +23,8 @@ Text createGeneralText({
         letterSpacing: getProportionateScreenWidth(letterSpacing),
         fontSize: getProportionateScreenWidth(fontSize),
         fontWeight: weight,
-        color: colorName),
+        color: colorName,
+      fontStyle: fontStyle,
+    ),
   );
 }

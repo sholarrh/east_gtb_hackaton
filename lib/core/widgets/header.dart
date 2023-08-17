@@ -15,7 +15,7 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: getProportionateScreenHeight(70),
+      height: getProportionateScreenHeight(100),
       decoration: const BoxDecoration(
           color: Palette.primaryColor,
           borderRadius: BorderRadius.only(
