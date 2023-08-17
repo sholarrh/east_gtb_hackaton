@@ -81,20 +81,18 @@ class Payments extends StatelessWidget {
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: createGeneralText(
-                  inputText: 'Payments',
-                  fontSize: 20,
-                  fontFamily: FontFamily.urbanistRegular,
-                  weight: FontWeight.w600,
-                  colorName: Palette.textColor1,
-                ),
+        child: Container(
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(24)
+          ),
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/IMG_3549.PNG'),
+                //fit: BoxFit.cover
               )
-            ],
           ),
         ),
       ),
@@ -110,20 +108,18 @@ class Transfers extends StatelessWidget {
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: createGeneralText(
-                  inputText: 'Transfers',
-                  fontSize: 20,
-                  fontFamily: FontFamily.urbanistRegular,
-                  weight: FontWeight.w600,
-                  colorName: Palette.textColor1,
-                ),
+        child: Container(
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(24)
+          ),
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/IMG_3550.PNG'),
+                //fit: BoxFit.cover
               )
-            ],
           ),
         ),
       ),
@@ -139,20 +135,18 @@ class Investments extends StatelessWidget {
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: createGeneralText(
-                  inputText: 'Investments',
-                  fontSize: 20,
-                  fontFamily: FontFamily.urbanistRegular,
-                  weight: FontWeight.w600,
-                  colorName: Palette.textColor1,
-                ),
+        child: Container(
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(24)
+          ),
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/IMG_3551.PNG'),
+                //fit: BoxFit.cover
               )
-            ],
           ),
         ),
       ),
